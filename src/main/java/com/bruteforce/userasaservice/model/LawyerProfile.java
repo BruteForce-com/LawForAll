@@ -1,26 +1,30 @@
-
-/// Represents a lawyer's professional profile in the legal services platform.
-///
-/// This entity stores comprehensive professional information about a lawyer,
-/// including their credentials, experience, areas of practice and professional metrics.
-/// Each profile is uniquely associated with a single user account through a one-to-one
-/// relationship.
-///
-/// Key features include:
-///
-///     - Bar council registration details and verification status
-///     - Professional experience and specializations
-///     - Court types and practice areas
-///     - Professional metrics including cases solved and average rating
-///     - Service pricing information
-///
-///
-///
-/// This entity is mapped to the `lawyer_profiles` table in the database,
-/// with related collections stored in separate join tables.
-///
-/// @see User
-/// @see VerificationStatus
+/**
+ * Represents a lawyer's professional profile in the legal services platform.
+ *
+ * <p>This entity stores comprehensive professional information about a lawyer,
+ * including their credentials, experience, areas of practice, and professional metrics.
+ * Each profile is uniquely associated with a single user account through a one-to-one
+ * relationship.</p>
+ *
+ * <h3>Key Features:</h3>
+ * <ul>
+ *   <li>Bar council registration details and verification status</li>
+ *   <li>Professional experience and specializations</li>
+ *   <li>Court types and practice areas</li>
+ *   <li>Professional metrics including cases solved and average rating</li>
+ *   <li>Service pricing information</li>
+ * </ul>
+ *
+ * <p>This entity is mapped to the `lawyer_profiles` table in the database,
+ * with related collections stored in separate join tables.</p>
+ *
+ * @see User
+ * @see VerificationStatus
+ *
+ * @author shivaverabandi - BruteForce.com
+ * @version 1.0
+ * @since 2025-10-22
+ */
 package com.bruteforce.userasaservice.model;
 
 import jakarta.persistence.Entity;
