@@ -26,18 +26,8 @@
 /// @see LawyerProfile
 
 package com.bruteforce.userasaservice.model;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +35,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -174,6 +166,29 @@ public class User {
     ///
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private LawyerProfile lawyerProfile;
+
+    /// The cases associated with this user as a public user.
+    ///
+    /// This is a one-to-many relationship where the LegalCase is the owning side.
+    /// The cases are automatically deleted if the user is deleted (orphanRemoval = true).
+    /// Loaded lazily to improve performance.
+    ///
+    /// @see LegalCase
+    ///
+    @OneToMany(mappedBy = "publicUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LegalCase> publicUserCases = new HashSet<>();
+
+    /// The cases associated with this user as a lawyer.
+    ///
+    /// This is a one-to-many relationship where the LegalCase is the owning side.
+    /// The cases are automatically deleted if the user is deleted (orphanRemoval = true).
+    /// Loaded lazily to improve performance.
+    ///
+    /// @see LegalCase
+    ///
+    @OneToMany(mappedBy = "lawyer", cascade = CascadeType.ALL)
+    private Set<LegalCase> lawyerCases = new HashSet<>();
+
 
     // Getters and setters would go here
 }
