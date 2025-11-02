@@ -127,4 +127,102 @@ public class LawyerProfile {
     @Column(name = "hourly_rate", precision = 10, scale = 2)
     private Double hourlyRate;
 
+    // ==================== Getters and Setters ====================
+
+
+    public UUID getLawyerId() {
+        return lawyerId;
+    }
+
+    public void setLawyerId(UUID lawyerId) {
+        this.lawyerId = lawyerId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getBarCouncilId() {
+        return barCouncilId;
+    }
+
+    public void setBarCouncilId(String barCouncilId) {
+        this.barCouncilId = barCouncilId;
+    }
+
+    public String getBarCouncilState() {
+        return barCouncilState;
+    }
+
+    public void setBarCouncilState(String barCouncilState) {
+        this.barCouncilState = barCouncilState;
+    }
+
+    public Integer getYearsOfExperience() {
+        return yearsOfExperience;
+    }
+
+    public void setYearsOfExperience(Integer yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public Set<String> getSpecializations() {
+        return specializations;
+    }
+
+    public void setSpecializations(Set<String> specializations) {
+        this.specializations = specializations;
+    }
+
+    public Set<String> getCourtTypes() {
+        return courtTypes;
+    }
+
+    public void setCourtTypes(Set<String> courtTypes) {
+        this.courtTypes = courtTypes;
+    }
+
+    public String getVerificationDocumentUrl() {
+        return verificationDocumentUrl;
+    }
+
+    public void setVerificationDocumentUrl(String verificationDocumentUrl) {
+        this.verificationDocumentUrl = verificationDocumentUrl;
+    }
+
+    public VerificationStatus getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(VerificationStatus verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    public Integer getCasesSolved() {
+        return casesSolved;
+    }
+
+    public void setCasesSolved(Integer casesSolved) {
+        this.casesSolved = casesSolved;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public Double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(Double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
 }

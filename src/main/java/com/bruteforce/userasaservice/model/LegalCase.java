@@ -186,6 +186,143 @@ public class LegalCase {
 
     // Getters & Setters
 
+    public String getJudgeName() {
+        return judgeName;
+    }
+
+    public void setJudgeName(String judgeName) {
+        this.judgeName = judgeName;
+    }
+
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
+    }
+
+    public String getLegalBasis() {
+        return legalBasis;
+    }
+
+    public void setLegalBasis(String legalBasis) {
+        this.legalBasis = legalBasis;
+    }
+
+    public BigDecimal getClaimedAmount() {
+        return claimedAmount;
+    }
+
+    public void setClaimedAmount(BigDecimal claimedAmount) {
+        this.claimedAmount = claimedAmount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getCourtName() {
+        return courtName;
+    }
+
+    public void setCourtName(String courtName) {
+        this.courtName = courtName;
+    }
+
+    public String getCaseNumber() {
+        return caseNumber;
+    }
+
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
+    }
+
+    public UUID getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(UUID caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CaseType getCaseType() {
+        return caseType;
+    }
+
+    public void setCaseType(CaseType caseType) {
+        this.caseType = caseType;
+    }
+
+    public CaseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CaseStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getFilingDate() {
+        return filingDate;
+    }
+
+    public void setFilingDate(LocalDate filingDate) {
+        this.filingDate = filingDate;
+    }
+
+    public LocalDate getHearingDate() {
+        return hearingDate;
+    }
+
+    public void setHearingDate(LocalDate hearingDate) {
+        this.hearingDate = hearingDate;
+    }
+
+    public User getPublicUser() {
+        return publicUser;
+    }
+
+    public void setPublicUser(User publicUser) {
+        this.publicUser = publicUser;
+    }
+
+    public User getLawyer() {
+        return lawyer;
+    }
+
+    public void setLawyer(User lawyer) {
+        this.lawyer = lawyer;
+    }
+
+
     // Optionally builder-style methods, equals/hashCode, toString
 }
 

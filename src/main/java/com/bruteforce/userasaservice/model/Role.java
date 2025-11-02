@@ -1,5 +1,5 @@
 package com.bruteforce.userasaservice.model;
 
 public enum Role {
-    PUBLIC, ADMIN, LAWYER
+    PUBLIC, ADMIN, LAWYER , LLM
 }
