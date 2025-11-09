@@ -81,7 +81,7 @@ public class User {
     /// The hashing should be done using a strong cryptographic hash function like BCrypt.
     @NotBlank(message = "Password hash is required")
     @Column(nullable = false)
-    private String passwordHash;
+    private String password;
 
     /// The user's full legal name. Required for all user accounts.
     ///
@@ -209,11 +209,11 @@ public class User {
     }
 
     public String getPasswordHash() {
-        return passwordHash;
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPasswordHash(String password) {
+        this.password = password;
     }
 
     public String getFullName() {
