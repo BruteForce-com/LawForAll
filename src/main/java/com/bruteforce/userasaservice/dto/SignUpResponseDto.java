@@ -5,7 +5,7 @@ import com.bruteforce.userasaservice.model.Role;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class UserRegistrationResponseDto {
+public class SignUpResponseDto {
 
     private UUID userId;
     private String userName;
@@ -15,12 +15,12 @@ public class UserRegistrationResponseDto {
     private long expiresIn; // Token expiration time in milliseconds
     private Role role;
 
-    public UserRegistrationResponseDto() {
+    public SignUpResponseDto() {
 
     }
 
 
-    public UserRegistrationResponseDto(UUID userId, String userName, String email, String token, LocalDateTime createdAt, long expiresIn) {
+    public SignUpResponseDto(UUID userId, String userName, String email, String token, LocalDateTime createdAt, long expiresIn) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;

@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
  * Data Transfer Object for user registration requests.
  * Contains all necessary fields for creating a new user account.
  */
-public class UserRegistrationRequestDto {
+public class SignUpRequestDto {
     
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")

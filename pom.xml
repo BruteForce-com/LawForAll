@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.bruteforce</groupId>
-    <artifactId>User-as-a-Service</artifactId>
+    <artifactId>LawForAll</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>User-as-a-Service</name>
-    <description>User-as-a-Service</description>
+    <name>LawForAlle</name>
+    <description>LawForAll</description>
     <url/>
     <licenses>
         <license/>
@@ -76,13 +76,6 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.3</version>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- Lombok (Optional but recommended) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- PostgreSQL -->
