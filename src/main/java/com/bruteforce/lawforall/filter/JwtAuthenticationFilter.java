@@ -1,6 +1,6 @@
-package com.bruteforce.userasaservice.filter;
+package com.bruteforce.lawforall.filter;
 
-import com.bruteforce.userasaservice.security.JwtService;
+import com.bruteforce.lawforall.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

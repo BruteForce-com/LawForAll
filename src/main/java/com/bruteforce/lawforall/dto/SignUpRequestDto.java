@@ -1,6 +1,6 @@
-package com.bruteforce.userasaservice.dto;
+package com.bruteforce.lawforall.dto;
 
-import com.bruteforce.userasaservice.model.Role;
+import com.bruteforce.lawforall.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

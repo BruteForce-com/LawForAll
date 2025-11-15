@@ -1,13 +1,13 @@
-package com.bruteforce.userasaservice;
+package com.bruteforce.lawforall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UserAsAServiceApplication {
+public class LawForAllApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserAsAServiceApplication.class, args);
+        SpringApplication.run(LawForAllApplication.class, args);
     }
 
 }

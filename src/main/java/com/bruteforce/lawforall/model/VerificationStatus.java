@@ -1,4 +1,4 @@
-package com.bruteforce.userasaservice.model;
+package com.bruteforce.lawforall.model;
 
 
 /// Represents the verification status of a lawyer's profile.

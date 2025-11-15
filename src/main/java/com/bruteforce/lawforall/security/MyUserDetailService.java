@@ -1,7 +1,7 @@
-package com.bruteforce.userasaservice.security;
+package com.bruteforce.lawforall.security;
 
-import com.bruteforce.userasaservice.model.User;
-import com.bruteforce.userasaservice.repo.UserRepository;
+import com.bruteforce.lawforall.model.User;
+import com.bruteforce.lawforall.repo.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

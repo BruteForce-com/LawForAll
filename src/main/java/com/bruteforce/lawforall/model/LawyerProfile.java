@@ -22,7 +22,7 @@
 /// @author shivaverabandi - BruteForce.com
 /// @version 1.0
 /// @since 2025-10-22
-package com.bruteforce.userasaservice.model;
+package com.bruteforce.lawforall.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;

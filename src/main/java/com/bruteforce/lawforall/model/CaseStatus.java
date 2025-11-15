@@ -1,4 +1,4 @@
-package com.bruteforce.userasaservice.model;
+package com.bruteforce.lawforall.model;
 
 /// Represents the status of a legal case in the system.
 ///

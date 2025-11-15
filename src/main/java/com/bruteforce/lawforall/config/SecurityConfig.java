@@ -1,7 +1,7 @@
-package com.bruteforce.userasaservice.config;
+package com.bruteforce.lawforall.config;
 
-import com.bruteforce.userasaservice.filter.JwtAuthenticationFilter;
-import com.bruteforce.userasaservice.security.MyUserDetailService;
+import com.bruteforce.lawforall.filter.JwtAuthenticationFilter;
+import com.bruteforce.lawforall.security.MyUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

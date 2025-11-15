@@ -1,10 +1,10 @@
-package com.bruteforce.userasaservice.service;
+package com.bruteforce.lawforall.service;
 
-import com.bruteforce.userasaservice.dto.SignUpRequestDto;
-import com.bruteforce.userasaservice.dto.SignUpResponseDto;
-import com.bruteforce.userasaservice.model.User;
-import com.bruteforce.userasaservice.repo.UserRepository;
-import com.bruteforce.userasaservice.security.JwtService;
+import com.bruteforce.lawforall.dto.SignUpRequestDto;
+import com.bruteforce.lawforall.dto.SignUpResponseDto;
+import com.bruteforce.lawforall.model.User;
+import com.bruteforce.lawforall.repo.UserRepository;
+import com.bruteforce.lawforall.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

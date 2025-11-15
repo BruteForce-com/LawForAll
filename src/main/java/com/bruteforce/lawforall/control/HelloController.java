@@ -1,4 +1,4 @@
-package com.bruteforce.userasaservice.control;
+package com.bruteforce.lawforall.control;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

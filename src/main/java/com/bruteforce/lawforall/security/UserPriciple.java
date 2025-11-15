@@ -1,6 +1,6 @@
-package com.bruteforce.userasaservice.security;
+package com.bruteforce.lawforall.security;
 
-import com.bruteforce.userasaservice.model.User;
+import com.bruteforce.lawforall.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -25,7 +25,7 @@
 /// @see Role
 /// @see LawyerProfile
 
-package com.bruteforce.userasaservice.model;
+package com.bruteforce.lawforall.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

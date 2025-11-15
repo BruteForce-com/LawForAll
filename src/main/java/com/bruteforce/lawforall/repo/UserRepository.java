@@ -1,7 +1,7 @@
-package com.bruteforce.userasaservice.repo;
+package com.bruteforce.lawforall.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.bruteforce.userasaservice.model.User;
+import com.bruteforce.lawforall.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;

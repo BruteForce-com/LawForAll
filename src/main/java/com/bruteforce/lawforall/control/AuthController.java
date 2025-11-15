@@ -1,8 +1,8 @@
-package com.bruteforce.userasaservice.control;
+package com.bruteforce.lawforall.control;
 
-import com.bruteforce.userasaservice.dto.SignUpRequestDto;
-import com.bruteforce.userasaservice.dto.SignUpResponseDto;
-import com.bruteforce.userasaservice.service.AuthService;
+import com.bruteforce.lawforall.dto.SignUpRequestDto;
+import com.bruteforce.lawforall.dto.SignUpResponseDto;
+import com.bruteforce.lawforall.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

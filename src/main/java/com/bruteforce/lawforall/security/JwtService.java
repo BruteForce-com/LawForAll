@@ -1,8 +1,8 @@
-package com.bruteforce.userasaservice.security;
+package com.bruteforce.lawforall.security;
 
-import com.bruteforce.userasaservice.model.Role;
-import com.bruteforce.userasaservice.model.User;
-import com.bruteforce.userasaservice.model.VerificationStatus;
+import com.bruteforce.lawforall.model.Role;
+import com.bruteforce.lawforall.model.User;
+import com.bruteforce.lawforall.model.VerificationStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

@@ -1,4 +1,4 @@
-package com.bruteforce.userasaservice.model;
+package com.bruteforce.lawforall.model;
 
 /// Represents a type of legal case.
 ///
