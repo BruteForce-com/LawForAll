@@ -81,54 +81,7 @@ public class ChatMessage {
         this.role = role;
     }
 
-    // ==================== BUILDER ====================
-    public static ChatMessageEntityBuilder builder() {
-        return new ChatMessageEntityBuilder();
-    }
 
-    public static class ChatMessageEntityBuilder {
-        private UUID conversationId;
-        private String userId;
-        private String title;
-        private Instant createdAt;
-        private Instant updatedAt;
-        private Role role;
-
-        ChatMessageEntityBuilder() {
-        }
-
-        public ChatMessageEntityBuilder conversationId(UUID conversationId) {
-            this.conversationId = conversationId;
-            return this;
-        }
-
-        public ChatMessageEntityBuilder userId(String userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public ChatMessageEntityBuilder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public ChatMessageEntityBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public ChatMessageEntityBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-        public ChatMessageEntityBuilder role(Role role) {
-            this.role = role;
-            return this;
-        }
-        public ChatMessage build() {
-            return new ChatMessage(conversationId, userId, title, createdAt, updatedAt, role);
-        }
-    }
 
     // ==================== LIFECYCLE ====================
     @PrePersist
@@ -193,5 +146,55 @@ public class ChatMessage {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+
+    // ==================== BUILDER ====================
+    public static ChatMessageEntityBuilder builder() {
+        return new ChatMessageEntityBuilder();
+    }
+
+    public static class ChatMessageEntityBuilder {
+        private UUID conversationId;
+        private String userId;
+        private String title;
+        private Instant createdAt;
+        private Instant updatedAt;
+        private Role role;
+
+        ChatMessageEntityBuilder() {
+        }
+
+        public ChatMessageEntityBuilder conversationId(UUID conversationId) {
+            this.conversationId = conversationId;
+            return this;
+        }
+
+        public ChatMessageEntityBuilder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public ChatMessageEntityBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public ChatMessageEntityBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public ChatMessageEntityBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+        public ChatMessageEntityBuilder role(Role role) {
+            this.role = role;
+            return this;
+        }
+        public ChatMessage build() {
+            return new ChatMessage(conversationId, userId, title, createdAt, updatedAt, role);
+        }
     }
 }

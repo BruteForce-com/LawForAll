@@ -35,24 +35,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(
         name = "users",
         indexes = {
-                @Index(name = "idx_user_username", columnList = "userName", unique = true),
-                @Index(name = "idx_user_phone", columnList = "phoneNumber", unique = true),
-                @Index(name = "idx_user_role_status", columnList = "role, isActive"),
-                @Index(name = "idx_oauth", columnList = "oauthProvider, oauthId")
-        },
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_oauth_provider_id",
-                        columnNames = {"oauthProvider", "oauthId"}
-                )
+                @Index(name = "idx_user_username", columnList = "username", unique = true),
+                @Index(name = "idx_user_phone", columnList = "phoneNumber", unique = true)
         }
 )
 public class User {
@@ -96,8 +86,8 @@ public class User {
     /// Used for @mentions and user identification. Must be between 3 and 50 characters.
     /// Only alphanumeric characters, dots, underscores, and hyphens are allowed.
     @NotBlank(message = "Username is required")
-    @Column(unique = true, nullable = false, length = 50, name = "user_name")
-    private String userName;
+    @Column(unique = true, nullable = false, length = 50, name = "username")
+    private String username;
 
     /// The user's phone number in valid format. Optional but must be unique if provided.
     @Column(length = 25, unique = true)
@@ -113,32 +103,6 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.PUBLIC;
 
-    /// The OAuth provider name if the user signed up via OAuth (e.g., "google", "facebook").
-    ///
-    /// This field is part of the composite unique constraint with oauthId.
-    /// Null for users who signed up with email/password.
-    @Column(name = "oauth_provider", length = 50)
-    private String oauthProvider;
-
-    /// The user's unique identifier from the OAuth provider.
-    ///
-    /// This is the external ID provided by the OAuth provider (e.g., Google's 'sub' claim).
-    /// Part of the composite unique constraint with oauthProvider.
-    @Column(name = "oauth_id", length = 100)
-    private String oauthId;
-
-    /// Indicates whether the user's email or phone number has been verified.
-    ///
-    /// Defaults to false. Should be set to true after the user verifies their email/phone.
-    @Column(name = "is_verified", nullable = false)
-    private Boolean isVerified = false;
-
-    /// Indicates whether the user account is active.
-    ///
-    /// Set to false deactivate the account instead of deleting it.
-    /// Deactivated users cannot log in but their data is preserved.
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
 
     /// The date and time when the user account was created.
     ///
@@ -156,78 +120,20 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    /// The lawyer profile associated with this user, if the user has the LAWYER role.
-    ///
-    /// This is a one-to-one relationship where the LawyerProfile is the owning side.
-    /// The profile is automatically deleted if the user is deleted (orphanRemoval = true).
-    /// Loaded lazily to improve performance.
-    ///
-    /// @see LawyerProfile
-    ///
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private LawyerProfile lawyerProfile;
-
-    /// The cases associated with this user as a public user.
-    ///
-    /// This is a one-to-many relationship where the LegalCase is the owning side.
-    /// The cases are automatically deleted if the user is deleted (orphanRemoval = true).
-    /// Loaded lazily to improve performance.
-    ///
-    /// @see LegalCase
-    ///
-    @OneToMany(mappedBy = "publicUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<LegalCase> publicUserCases = new HashSet<>();
-
-    /// The cases associated with this user as a lawyer.
-    ///
-    /// This is a one-to-many relationship where the LegalCase is the owning side.
-    /// The cases are automatically deleted if the user is deleted (orphanRemoval = true).
-    /// Loaded lazily to improve performance.
-    ///
-    /// @see LegalCase
-    ///
-    @OneToMany(mappedBy = "lawyer", cascade = CascadeType.ALL)
-    private Set<LegalCase> lawyerCases = new HashSet<>();
-
 
     // Empty constructor
     public User() {
     }
 
-    // Constructor with email, password, and fullName
-    public User(String email, String password, String fullName, String userName, String phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.userName = userName;
-        this.phoneNumber = phoneNumber;
-    }
-
     // Constructor with all fields
-    public User(UUID userId, String email, String password, String fullName, String userName,
-                String phoneNumber, Role role, String oauthProvider, String oauthId,
-                Boolean isVerified, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
-                LawyerProfile lawyerProfile, Set<LegalCase> publicUserCases, Set<LegalCase> lawyerCases) {
-        this.userId = userId;
+    public User(String email, String password, String fullName, String username, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
-        this.userName = userName;
+        this.username = username;
         this.phoneNumber = phoneNumber;
         this.role = role;
-        this.oauthProvider = oauthProvider;
-        this.oauthId = oauthId;
-        this.isVerified = isVerified;
-        this.isActive = isActive;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.lawyerProfile = lawyerProfile;
-        this.publicUserCases = publicUserCases;
-        this.lawyerCases = lawyerCases;
     }
-
-
-    // Getters and setters would go here
 
     public UUID getUserId() {
         return userId;
@@ -261,12 +167,12 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPhoneNumber() {
@@ -285,38 +191,6 @@ public class User {
         this.role = role;
     }
 
-    public String getOauthProvider() {
-        return oauthProvider;
-    }
-
-    public void setOauthProvider(String oauthProvider) {
-        this.oauthProvider = oauthProvider;
-    }
-
-    public String getOauthId() {
-        return oauthId;
-    }
-
-    public void setOauthId(String oauthId) {
-        this.oauthId = oauthId;
-    }
-
-    public Boolean getVerified() {
-        return isVerified;
-    }
-
-    public void setVerified(Boolean verified) {
-        isVerified = verified;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -333,136 +207,45 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public LawyerProfile getLawyerProfile() {
-        return lawyerProfile;
-    }
-
-    public void setLawyerProfile(LawyerProfile lawyerProfile) {
-        this.lawyerProfile = lawyerProfile;
-    }
-
-    public Set<LegalCase> getPublicUserCases() {
-        return publicUserCases;
-    }
-
-    public void setPublicUserCases(Set<LegalCase> publicUserCases) {
-        this.publicUserCases = publicUserCases;
-    }
-
-    public Set<LegalCase> getLawyerCases() {
-        return lawyerCases;
-    }
-
-    public void setLawyerCases(Set<LegalCase> lawyerCases) {
-        this.lawyerCases = lawyerCases;
-    }
-
-
-    public static class Builder {
-        private UUID userId;
+    // Builder pattern
+    public static class UserBuilder {
         private String email;
         private String password;
-        private String fullName;    // Changed from firstName
-        private String userName;    // Added
+        private String fullName;
+        private String username;
         private String phoneNumber;
-        private Role role = Role.PUBLIC;  // Added with default
-        private String oauthProvider;
-        private String oauthId;
-        private Boolean isVerified = false;
-        private Boolean isActive = true;
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
-        private LawyerProfile lawyerProfile;
-        private Set<LegalCase> publicUserCases = new HashSet<>();
-        private Set<LegalCase> lawyerCases = new HashSet<>();
+        private Role role;
 
-        public Builder() {
+        public UserBuilder() {
         }
 
-        public Builder userId(UUID userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder email(String email) {
+        public UserBuilder email(String email) {
             this.email = email;
             return this;
         }
-
-        public Builder password(String password) {
+        public UserBuilder password(String password) {
             this.password = password;
             return this;
         }
-
-        public Builder oauthProvider(String oauthProvider) {
-            this.oauthProvider = oauthProvider;
-            return this;
-        }
-
-        public Builder oauthId(String oauthId) {
-            this.oauthId = oauthId;
-            return this;
-        }
-
-        public Builder firstName(String fullName) {
+        public UserBuilder fullName(String fullName) {
             this.fullName = fullName;
             return this;
         }
-        public Builder lastName(String userName) {
-            this.userName = userName;
+        public UserBuilder username(String username) {
+            this.username = username;
             return this;
         }
-        public Builder phoneNumber(String phoneNumber) {
+        public UserBuilder phoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
             return this;
         }
-
-        public Builder isVerified(Boolean isVerified) {
-            this.isVerified = isVerified;
-            return this;
-        }
-
-        public Builder isActive(Boolean isActive) {
-            this.isActive = isActive;
-            return this;
-        }
-
-        public Builder createdAt(LocalDateTime createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public Builder updatedAt(LocalDateTime updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-        public Builder role(Role role) {
+        public UserBuilder role(Role role) {
             this.role = role;
             return this;
         }
-
-        public Builder lawyerProfile(LawyerProfile lawyerProfile) {
-            this.lawyerProfile = lawyerProfile;
-            return this;
-        }
-
-        public Builder publicUserCases(Set<LegalCase> publicUserCases) {
-            this.publicUserCases = publicUserCases;
-            return this;
-        }
-
-        public Builder lawyerCases(Set<LegalCase> lawyerCases) {
-            this.lawyerCases = lawyerCases;
-            return this;
-        }
-
         public User build() {
-            return new User(
-                    userId, email, password, fullName,
-                    userName, phoneNumber, role, oauthProvider, oauthId,
-                    isVerified, isActive, createdAt, updatedAt, lawyerProfile,
-                    publicUserCases, lawyerCases
-            );
+            return new User(email, password, fullName, username, phoneNumber, role);
         }
+
     }
 }

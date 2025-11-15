@@ -15,18 +15,18 @@ public class MyUserDetailService implements UserDetailsService {
     public MyUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        boolean isUserExists = userRepository.existsUserByuserName(username);
-        boolean isEmailExists = userRepository.existsUserByEmail(username);
-        if (!isUserExists || !isEmailExists) {
-            throw new UsernameNotFoundException("User not found");
+        // First, try to find the user by username or email
+        User user = username.contains("@")
+                ? userRepository.findByEmail(username)
+                : userRepository.findByUsername(username);
+
+        // If user not found, throw an exception
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username/email: " + username);
         }
-        User user;
-        if(username.contains("@"))
-            user = userRepository.findByEmail(username);
-        else
-            user = userRepository.findByUserName(username);
 
         return new UserPriciple(user);
     }

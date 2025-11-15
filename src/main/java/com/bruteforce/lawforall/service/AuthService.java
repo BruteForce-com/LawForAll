@@ -1,14 +1,17 @@
 package com.bruteforce.lawforall.service;
 
+import com.bruteforce.lawforall.Utils.DtoConverter;
+import com.bruteforce.lawforall.dto.SignInRequestDto;
 import com.bruteforce.lawforall.dto.SignUpRequestDto;
-import com.bruteforce.lawforall.dto.SignUpResponseDto;
+import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
 import com.bruteforce.lawforall.repo.UserRepository;
 import com.bruteforce.lawforall.security.JwtService;
+import com.bruteforce.lawforall.security.UserPriciple;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @Service
 public class AuthService {
@@ -27,35 +30,56 @@ public class AuthService {
 
 
 
-    public SignUpResponseDto signUp(SignUpRequestDto requestDto) {
+    public String signUp(SignUpRequestDto requestDto) {
 
-        boolean isEmailExists = userRepository.existsUserByEmail(requestDto.getEmail());
-        boolean isUsernameExists = userRepository.existsUserByuserName(requestDto.getUserName());
-
-
-        if (isEmailExists || isUsernameExists) {
-            throw new RuntimeException("Email or username already exists");
+        // Check if email already exists
+        if (userRepository.existsUserByEmail(requestDto.getEmail())) {
+            throw new IllegalArgumentException("Email is already registered");
         }
 
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        // Check if the username already exists
+        if (userRepository.existsUserByUsername(requestDto.getUserName())) {
+            throw new IllegalArgumentException("Username is already taken");
+        }
 
-        User user = new User();
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(encodedPassword);
-        user.setFullName(requestDto.getFullName());
-        user.setUserName(requestDto.getUserName());
-        user.setPhoneNumber(requestDto.getPhoneNumber());
-        user.setRole(requestDto.getRole());
+        // Hash the password
+        String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User savedUser = userRepository.save(user);
-        
-        // After registration, generate the token to return to the client
-        String token = jwtService.generateToken(savedUser);
+        // convert SignUpRequestDto to User
+        User newUser = DtoConverter.convertSignUpRequestDtoToUser(requestDto, hashedPassword);
 
-        LocalDateTime createdAt = LocalDateTime.now();
-        return new SignUpResponseDto(savedUser.getUserId(), savedUser.getUserName(), savedUser.getEmail(), token, createdAt);
+        // Save user to the database
+        User savedUser = userRepository.save(newUser);
 
+        // Generate and return JWT token
+        return jwtService.generateToken(savedUser.getEmail());
 
 
+    }
+
+
+    public String signIn(SignInRequestDto requestDto) {
+
+        // check the user exists or not
+        if(requestDto.getUsernameOrEmail().contains("@")) {
+            User user = userRepository.findByEmail(requestDto.getUsernameOrEmail());
+            System.out.println(user);
+            if(user == null) {
+                throw new IllegalArgumentException("User not found");
+            }
+            if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("Invalid password");
+            }
+            return jwtService.generateToken(user.getEmail());
+        } else {
+            User user = userRepository.findByUsername(requestDto.getUsernameOrEmail());
+            if(user == null) {
+                throw new IllegalArgumentException("User not found");
+            }
+            if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("Invalid password");
+            }
+            return jwtService.generateToken(user.getUsername());
+        }
     }
 }
