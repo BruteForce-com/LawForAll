@@ -127,6 +127,29 @@ public class LawyerProfile {
     @Column(name = "hourly_rate", precision = 10, scale = 2)
     private Double hourlyRate;
 
+    public LawyerProfile() {
+
+    }
+
+    // Constructor with all fields
+    public LawyerProfile(UUID lawyerId, User user, String barCouncilId, String barCouncilState, Integer yearsOfExperience,
+                         Set<String> specializations, Set<String> courtTypes, String verificationDocumentUrl,
+                         VerificationStatus verificationStatus, Integer casesSolved,
+                         Double averageRating, Double hourlyRate) {
+        this.lawyerId = lawyerId;
+        this.user = user;
+        this.barCouncilId = barCouncilId;
+        this.barCouncilState = barCouncilState;
+        this.yearsOfExperience = yearsOfExperience;
+        this.specializations = specializations;
+        this.courtTypes = courtTypes;
+        this.verificationDocumentUrl = verificationDocumentUrl;
+        this.verificationStatus = verificationStatus;
+        this.casesSolved = casesSolved;
+        this.averageRating = averageRating;
+        this.hourlyRate = hourlyRate;
+    }
+
     // ==================== Getters and Setters ====================
 
 
@@ -225,4 +248,75 @@ public class LawyerProfile {
     public void setHourlyRate(Double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
+
+    // Builder pattern
+    public static class LawyerProfileBuilder {
+        private UUID lawyerId;
+        private User user;
+        private String barCouncilId;
+        private String barCouncilState;
+        private Integer yearsOfExperience;
+        private Set<String> specializations;
+        private Set<String> courtTypes;
+        private String verificationDocumentUrl;
+        private VerificationStatus verificationStatus;
+        private Integer casesSolved;
+        private Double averageRating;
+        private Double hourlyRate;
+        public LawyerProfileBuilder lawyerId(UUID lawyerId) {
+            this.lawyerId = lawyerId;
+            return this;
+        }
+        public LawyerProfileBuilder user(User user) {
+            this.user = user;
+            return this;
+        }
+        public LawyerProfileBuilder barCouncilId(String barCouncilId) {
+            this.barCouncilId = barCouncilId;
+            return this;
+        }
+        public LawyerProfileBuilder barCouncilState(String barCouncilState) {
+            this.barCouncilState = barCouncilState;
+            return this;
+        }
+        public LawyerProfileBuilder yearsOfExperience(Integer yearsOfExperience) {
+            this.yearsOfExperience = yearsOfExperience;
+            return this;
+        }
+        public LawyerProfileBuilder specializations(Set<String> specializations) {
+            this.specializations = specializations;
+            return this;
+        }
+        public LawyerProfileBuilder courtTypes(Set<String> courtTypes) {
+            this.courtTypes = courtTypes;
+            return this;
+        }
+        public LawyerProfileBuilder verificationDocumentUrl(String verificationDocumentUrl) {
+            this.verificationDocumentUrl = verificationDocumentUrl;
+            return this;
+        }
+        public LawyerProfileBuilder verificationStatus(VerificationStatus verificationStatus) {
+            this.verificationStatus = verificationStatus;
+            return this;
+        }
+        public LawyerProfileBuilder casesSolved(Integer casesSolved) {
+            this.casesSolved = casesSolved;
+            return this;
+        }
+        public LawyerProfileBuilder averageRating(Double averageRating) {
+            this.averageRating = averageRating;
+            return this;
+        }
+        public LawyerProfileBuilder hourlyRate(Double hourlyRate) {
+            this.hourlyRate = hourlyRate;
+            return this;
+        }
+        public LawyerProfile build() {
+            return new LawyerProfile(lawyerId, user, barCouncilId, barCouncilState, yearsOfExperience,
+                    specializations, courtTypes, verificationDocumentUrl, verificationStatus, casesSolved,
+                    averageRating, hourlyRate);
+        }
+    }
 }
+
+

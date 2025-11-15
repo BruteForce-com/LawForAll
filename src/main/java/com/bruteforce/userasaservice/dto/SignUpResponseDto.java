@@ -12,7 +12,6 @@ public class SignUpResponseDto {
     private String email;
     private String token;
     private LocalDateTime createdAt;
-    private long expiresIn; // Token expiration time in milliseconds
     private Role role;
 
     public SignUpResponseDto() {
@@ -20,13 +19,13 @@ public class SignUpResponseDto {
     }
 
 
-    public SignUpResponseDto(UUID userId, String userName, String email, String token, LocalDateTime createdAt, long expiresIn) {
+    public SignUpResponseDto(UUID userId, String userName, String email, String token, LocalDateTime createdAt) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
         this.token = token;
         this.createdAt = createdAt;
-        this.expiresIn = expiresIn;
+
     }
 
 
@@ -68,14 +67,6 @@ public class SignUpResponseDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public long getExpiresIn() {
-        return expiresIn;
-    }
-
-    public void setExpiresIn(long expiresIn) {
-        this.expiresIn = expiresIn;
     }
 
     public Role getRole() {

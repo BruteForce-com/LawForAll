@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 
-public class UserPriciple implements UserDetails {
+public final class UserPriciple implements UserDetails {
 
     private final User user;
 

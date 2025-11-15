@@ -1,5 +1,8 @@
 package com.bruteforce.userasaservice.security;
 
+import com.bruteforce.userasaservice.model.Role;
+import com.bruteforce.userasaservice.model.User;
+import com.bruteforce.userasaservice.model.VerificationStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,26 +28,33 @@ public class JwtService {
     private long jwtExpirationInMs;
 
 
-    public String generateToken(String username) {
-        Date expiration = new Date(System.currentTimeMillis() + jwtExpirationInMs);
-        return Jwts.builder()
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(expiration)
-                .signWith(getSignInKey())
-                .compact();
-    }
+    /**
+     * This method generates a JWT token with only the username and signature.
+     * It is more secure because it does not include any extra claims.
+     *
+     * @param user the user object
+     * @return the generated JWT token
+     */
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());  // Add role claim
+        claims.put("email", user.getEmail());       // Add other useful claims
+        claims.put("userId", user.getUserId());     // Add user ID
 
-    public String generateToken(Map<String, Object> extraClaims, String username) {
+        // For lawyers, you might want to add additional claims
+        if (user.getRole() == Role.LAWYER && user.getLawyerProfile() != null) {
+            claims.put("lawyerId", user.getLawyerProfile().getLawyerId());
+            claims.put("isVerified", user.getLawyerProfile().getVerificationStatus() == VerificationStatus.VERIFIED);
+        }
+
         return Jwts.builder()
-                .claims(extraClaims)
-                .subject(username)
+                .claims(claims)
+                .subject(user.getUserName())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
                 .signWith(getSignInKey())
                 .compact();
     }
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

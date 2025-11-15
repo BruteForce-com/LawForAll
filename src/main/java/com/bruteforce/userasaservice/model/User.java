@@ -190,6 +190,43 @@ public class User {
     private Set<LegalCase> lawyerCases = new HashSet<>();
 
 
+    // Empty constructor
+    public User() {
+    }
+
+    // Constructor with email, password, and fullName
+    public User(String email, String password, String fullName, String userName, String phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+    }
+
+    // Constructor with all fields
+    public User(UUID userId, String email, String password, String fullName, String userName,
+                String phoneNumber, Role role, String oauthProvider, String oauthId,
+                Boolean isVerified, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
+                LawyerProfile lawyerProfile, Set<LegalCase> publicUserCases, Set<LegalCase> lawyerCases) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.oauthProvider = oauthProvider;
+        this.oauthId = oauthId;
+        this.isVerified = isVerified;
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.lawyerProfile = lawyerProfile;
+        this.publicUserCases = publicUserCases;
+        this.lawyerCases = lawyerCases;
+    }
+
+
     // Getters and setters would go here
 
     public UUID getUserId() {
@@ -318,5 +355,114 @@ public class User {
 
     public void setLawyerCases(Set<LegalCase> lawyerCases) {
         this.lawyerCases = lawyerCases;
+    }
+
+
+    public static class Builder {
+        private UUID userId;
+        private String email;
+        private String password;
+        private String fullName;    // Changed from firstName
+        private String userName;    // Added
+        private String phoneNumber;
+        private Role role = Role.PUBLIC;  // Added with default
+        private String oauthProvider;
+        private String oauthId;
+        private Boolean isVerified = false;
+        private Boolean isActive = true;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private LawyerProfile lawyerProfile;
+        private Set<LegalCase> publicUserCases = new HashSet<>();
+        private Set<LegalCase> lawyerCases = new HashSet<>();
+
+        public Builder() {
+        }
+
+        public Builder userId(UUID userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder oauthProvider(String oauthProvider) {
+            this.oauthProvider = oauthProvider;
+            return this;
+        }
+
+        public Builder oauthId(String oauthId) {
+            this.oauthId = oauthId;
+            return this;
+        }
+
+        public Builder firstName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+        public Builder lastName(String userName) {
+            this.userName = userName;
+            return this;
+        }
+        public Builder phoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder isVerified(Boolean isVerified) {
+            this.isVerified = isVerified;
+            return this;
+        }
+
+        public Builder isActive(Boolean isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+        public Builder role(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder lawyerProfile(LawyerProfile lawyerProfile) {
+            this.lawyerProfile = lawyerProfile;
+            return this;
+        }
+
+        public Builder publicUserCases(Set<LegalCase> publicUserCases) {
+            this.publicUserCases = publicUserCases;
+            return this;
+        }
+
+        public Builder lawyerCases(Set<LegalCase> lawyerCases) {
+            this.lawyerCases = lawyerCases;
+            return this;
+        }
+
+        public User build() {
+            return new User(
+                    userId, email, password, fullName,
+                    userName, phoneNumber, role, oauthProvider, oauthId,
+                    isVerified, isActive, createdAt, updatedAt, lawyerProfile,
+                    publicUserCases, lawyerCases
+            );
+        }
     }
 }

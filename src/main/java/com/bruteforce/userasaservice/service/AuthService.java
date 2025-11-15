@@ -8,6 +8,8 @@ import com.bruteforce.userasaservice.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthService {
 
@@ -48,8 +50,10 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         
         // After registration, generate the token to return to the client
-        String token = jwtService.generateToken(savedUser.getUserName());
+        String token = jwtService.generateToken(savedUser);
 
+        LocalDateTime createdAt = LocalDateTime.now();
+        return new SignUpResponseDto(savedUser.getUserId(), savedUser.getUserName(), savedUser.getEmail(), token, createdAt);
 
 
 

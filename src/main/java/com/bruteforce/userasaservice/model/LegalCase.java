@@ -184,6 +184,24 @@ public class LegalCase {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+
+    // Default constructor
+    public LegalCase() {
+    }
+
+    // Constructor with all fields
+    public LegalCase(CaseType caseType, String caseNumber, String description, CaseStatus status,
+                     LocalDate filingDate, LocalDate hearingDate, User publicUser, User lawyer) {
+        this.caseType = caseType;
+        this.caseNumber = caseNumber;
+        this.description = description;
+        this.status = status;
+        this.filingDate = filingDate;
+        this.hearingDate = hearingDate;
+        this.publicUser = publicUser;
+        this.lawyer = lawyer;
+    }
+
     // Getters & Setters
 
     public String getJudgeName() {
@@ -324,5 +342,64 @@ public class LegalCase {
 
 
     // Optionally builder-style methods, equals/hashCode, toString
+
+
+    public static class LegalCaseBuilder {
+        private CaseType caseType;
+        private String caseNumber;
+        private String description;
+        private CaseStatus status;
+        private LocalDate filingDate;
+        private LocalDate hearingDate;
+        private User publicUser;
+        private User lawyer;
+
+        public LegalCaseBuilder() {
+        }
+
+        public LegalCaseBuilder caseType(CaseType caseType) {
+            this.caseType = caseType;
+            return this;
+        }
+
+        public LegalCaseBuilder caseNumber(String caseNumber) {
+            this.caseNumber = caseNumber;
+            return this;
+        }
+
+        public LegalCaseBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public LegalCaseBuilder status(CaseStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public LegalCaseBuilder filingDate(LocalDate filingDate) {
+            this.filingDate = filingDate;
+            return this;
+        }
+
+        public LegalCaseBuilder hearingDate(LocalDate hearingDate) {
+            this.hearingDate = hearingDate;
+            return this;
+        }
+
+        public LegalCaseBuilder publicUser(User publicUser) {
+            this.publicUser = publicUser;
+            return this;
+        }
+
+        public LegalCaseBuilder lawyer(User lawyer) {
+            this.lawyer = lawyer;
+            return this;
+        }
+
+        public LegalCase build() {
+            return new LegalCase(caseType, caseNumber, description, status, filingDate, hearingDate, publicUser, lawyer);
+        }
+    }
 }
 
