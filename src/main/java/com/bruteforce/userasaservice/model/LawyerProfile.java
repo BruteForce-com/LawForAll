@@ -26,6 +26,8 @@ package com.bruteforce.userasaservice.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
+
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -120,12 +122,13 @@ public class LawyerProfile {
     /// Average rating of the lawyer (scale 0.00 - 5.00 typically).
     /// Column: `average_rating` with precision and scale defined, defaults to 0.00.
     @Column(name = "average_rating", precision = 3, scale = 2, nullable = false)
-    private Double averageRating = 0.00;
+    private BigDecimal averageRating = BigDecimal.ZERO;
 
     /// Hourly rate charged by the lawyer.
     /// Column: `hourly_rate`, decimal with precision and scale.
-    @Column(name = "hourly_rate", precision = 10, scale = 2)
-    private Double hourlyRate;
+    @Column(name = "price", precision = 10, scale = 2)
+    private BigDecimal hourlyRate;
+
 
     public LawyerProfile() {
 
@@ -233,19 +236,19 @@ public class LawyerProfile {
         this.casesSolved = casesSolved;
     }
 
-    public Double getAverageRating() {
+    public BigDecimal getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(Double averageRating) {
+    public void setAverageRating(BigDecimal averageRating) {
         this.averageRating = averageRating;
     }
 
-    public Double getHourlyRate() {
+    public BigDecimal getHourlyRate() {
         return hourlyRate;
     }
 
-    public void setHourlyRate(Double hourlyRate) {
+    public void setHourlyRate(BigDecimal hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
 
