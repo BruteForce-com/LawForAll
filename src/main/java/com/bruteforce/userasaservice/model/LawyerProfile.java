@@ -138,7 +138,7 @@ public class LawyerProfile {
     public LawyerProfile(UUID lawyerId, User user, String barCouncilId, String barCouncilState, Integer yearsOfExperience,
                          Set<String> specializations, Set<String> courtTypes, String verificationDocumentUrl,
                          VerificationStatus verificationStatus, Integer casesSolved,
-                         Double averageRating, Double hourlyRate) {
+                         BigDecimal averageRating, BigDecimal hourlyRate) {
         this.lawyerId = lawyerId;
         this.user = user;
         this.barCouncilId = barCouncilId;
@@ -264,8 +264,8 @@ public class LawyerProfile {
         private String verificationDocumentUrl;
         private VerificationStatus verificationStatus;
         private Integer casesSolved;
-        private Double averageRating;
-        private Double hourlyRate;
+        private BigDecimal averageRating;
+        private BigDecimal hourlyRate;
         public LawyerProfileBuilder lawyerId(UUID lawyerId) {
             this.lawyerId = lawyerId;
             return this;
@@ -306,11 +306,11 @@ public class LawyerProfile {
             this.casesSolved = casesSolved;
             return this;
         }
-        public LawyerProfileBuilder averageRating(Double averageRating) {
+        public LawyerProfileBuilder averageRating(BigDecimal averageRating) {
             this.averageRating = averageRating;
             return this;
         }
-        public LawyerProfileBuilder hourlyRate(Double hourlyRate) {
+        public LawyerProfileBuilder hourlyRate(BigDecimal hourlyRate) {
             this.hourlyRate = hourlyRate;
             return this;
         }
