@@ -1,6 +1,8 @@
 package com.bruteforce.lawforall.filter;
 
 import com.bruteforce.lawforall.security.JwtService;
+import com.bruteforce.lawforall.security.MyUserDetailService;
+import com.bruteforce.lawforall.security.UserPriciple;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,9 +22,9 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final MyUserDetailService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtService jwtService, MyUserDetailService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -46,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmailOrName = jwtService.extractUsername(jwt);
 
         if (userEmailOrName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmailOrName);
+            UserPriciple userDetails = this.userDetailsService.loadUserByUsername(userEmailOrName);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
