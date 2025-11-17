@@ -47,6 +47,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    // username can be username or email
     public boolean isTokenValid(String token, UserPriciple userDetails) {
         final String username = extractUsername(token);
         return ((username.equals(userDetails.getUsername()) || username.equals(userDetails.getEmail())) && !isTokenExpired(token));
