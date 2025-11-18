@@ -1,7 +1,9 @@
 package com.bruteforce.lawforall.Utils;
 
 
+import com.bruteforce.lawforall.dto.ChatResponseDto;
 import com.bruteforce.lawforall.dto.SignUpRequestDto;
+import com.bruteforce.lawforall.model.ChatMessage;
 import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
 
@@ -19,4 +21,8 @@ public final class DtoConverter {
                 .build();
     }
 
+    public static ChatResponseDto convertChatMessageToChatResponseDto(ChatMessage savedChat) {
+
+        return new ChatResponseDto();
+    }
 }

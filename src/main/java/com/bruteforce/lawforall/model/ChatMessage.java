@@ -29,10 +29,17 @@ import java.util.UUID;
 @Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
+
+    /*
+    * The unique identifier for the session.
+    */
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     /**
      * The unique identifier for the conversation that this message belongs to.
      */
-    @Id
     @Column(name = "conversation_id", length = 255)
     private UUID conversationId;
 
@@ -47,6 +54,12 @@ public class ChatMessage {
      */
     @Column(name = "title", length = 500)
     private String title;
+
+    /*
+    * The message content.
+    */
+    @Column(name = "message")
+    private String message;
 
     /**
      * The timestamp when the message was created.
@@ -71,10 +84,11 @@ public class ChatMessage {
     public ChatMessage() {
     }
 
-    public ChatMessage(UUID conversationId, String userId, String title,
+    public ChatMessage(UUID conversationId, String userId, String message, String title,
                               Instant createdAt, Instant updatedAt, Role role) {
         this.conversationId = conversationId;
         this.userId = userId;
+        this.message = message;
         this.title = title;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -100,6 +114,13 @@ public class ChatMessage {
     }
 
     // ==================== GETTERS & SETTERS ====================
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public UUID getConversationId() {
         return conversationId;
     }
@@ -114,6 +135,14 @@ public class ChatMessage {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getTitle() {
@@ -158,6 +187,7 @@ public class ChatMessage {
         private UUID conversationId;
         private String userId;
         private String title;
+        private String message;
         private Instant createdAt;
         private Instant updatedAt;
         private Role role;
@@ -172,6 +202,10 @@ public class ChatMessage {
 
         public ChatMessageEntityBuilder userId(String userId) {
             this.userId = userId;
+            return this;
+        }
+        public ChatMessageEntityBuilder message(String message) {
+            this.message = message;
             return this;
         }
 
@@ -194,7 +228,7 @@ public class ChatMessage {
             return this;
         }
         public ChatMessage build() {
-            return new ChatMessage(conversationId, userId, title, createdAt, updatedAt, role);
+            return new ChatMessage(conversationId, userId,message,title, createdAt, updatedAt, role);
         }
     }
 }

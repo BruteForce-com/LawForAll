@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 
 public final class UserPriciple implements UserDetails {
@@ -19,6 +20,10 @@ public final class UserPriciple implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
+    }
+
+    public UUID getId(){
+        return user.getUserId();
     }
 
     @Override
