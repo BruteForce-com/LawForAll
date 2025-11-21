@@ -9,6 +9,8 @@ import com.bruteforce.lawforall.model.User;
 
 public final class DtoConverter {
 
+
+    // convert sign up request dto to user
     public static User convertSignUpRequestDtoToUser(SignUpRequestDto requestDto, String password) {
 
         return new User.UserBuilder()
@@ -21,8 +23,14 @@ public final class DtoConverter {
                 .build();
     }
 
+    // convert chat message to chat response dto
     public static ChatResponseDto convertChatMessageToChatResponseDto(ChatMessage savedChat) {
-
-        return new ChatResponseDto();
+        return new ChatResponseDto.ChatResponseDtoBuilder()
+                .conversationId(savedChat.getConversationId())
+                .message(savedChat.getMessage())
+                .title(savedChat.getTitle())
+                .role(savedChat.getRole())
+                .userId(savedChat.getUserId())
+                .build();
     }
 }

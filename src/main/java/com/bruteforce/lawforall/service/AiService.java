@@ -54,7 +54,7 @@ public class AiService {
         String userId = user.getUserId().toString();
 
         // Check that Session Already created or not
-        List<ChatMessage> chatMessages = chatRepository.findAllByConversationIdAndUserIdOrderByTimestampAsc(requestDto.getConversationId(),userId);
+        List<ChatMessage> chatMessages = chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(requestDto.getConversationId(),userId);
 
         // conversationId for creating a new session if not exist. Otherwise, use existing conversationId
         UUID conversationId;
@@ -90,7 +90,9 @@ public class AiService {
         variables.put("fullname", user.getFullName());
         variables.put("conversationId", conversationId);
         variables.put("role", user.getRole());
+        variables.put("message", requestDto.getMessage());
         String overAllPrompt = promptTemplate.create(variables).getContents();
+        log.info("Prompt sent to llm with user query: {}", overAllPrompt);
 
         // Generate the llm response for the requestDto.getMessage()
         String llmResponse = chatClient.prompt(overAllPrompt)
@@ -108,7 +110,12 @@ public class AiService {
         // Return the response by converting ChatMessage to ChatResponseDto
         return DtoConverter.convertChatMessageToChatResponseDto(savedChat);
 
+    }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+    public List<ChatResponseDto> getAllChatsOfSession(UUID conversationId, UUID userId) {
+        List<ChatMessage> chatMessages =  chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(conversationId, userId.toString());
+        return chatMessages.stream().map(DtoConverter::convertChatMessageToChatResponseDto).toList();
     }
 
 }

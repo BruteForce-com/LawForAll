@@ -1,6 +1,7 @@
 package com.bruteforce.lawforall.control;
 
 import com.bruteforce.lawforall.dto.ChatRequestDto;
+import com.bruteforce.lawforall.dto.ChatResponseDto;
 import com.bruteforce.lawforall.security.UserPriciple;
 import com.bruteforce.lawforall.service.AiService;
 import jakarta.validation.Valid;
@@ -10,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -31,10 +35,24 @@ public class AIController {
         logger.info("{} asked AI: {}", user.getUsername(), requestDto.getMessage());
 
         try{
+            requestDto.setUserId(user.getId());
             return ResponseEntity.ok(aiService.askAI(requestDto));
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 
+    }
+
+    @GetMapping("/chats/{conversationId}")
+    public ResponseEntity<?> getAllChatsOfSession(@AuthenticationPrincipal UserPriciple user, @PathVariable UUID conversationId) {
+        try{
+            List<ChatResponseDto> response = aiService.getAllChatsOfSession(conversationId, user.getId());
+            if(response.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No chats found for this session");
+            }
+            return ResponseEntity.ok(response);
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

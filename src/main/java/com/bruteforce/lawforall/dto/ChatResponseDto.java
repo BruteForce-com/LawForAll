@@ -1,5 +1,7 @@
 package com.bruteforce.lawforall.dto;
 
+import com.bruteforce.lawforall.model.Role;
+
 import java.util.UUID;
 
 public class ChatResponseDto {
@@ -7,12 +9,12 @@ public class ChatResponseDto {
     private UUID conversationId;
     private String message;
     private String title;
-    private String role;
+    private Role role;
     private String userId;
 
     public ChatResponseDto() {
     }
-    public ChatResponseDto(UUID conversationId, String message, String title, String role, String userId) {
+    public ChatResponseDto(UUID conversationId, String message, String title, Role role, String userId) {
         this.conversationId = conversationId;
         this.message = message;
         this.title = title;
@@ -37,10 +39,10 @@ public class ChatResponseDto {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
     public String getUserId() {
@@ -54,7 +56,7 @@ public class ChatResponseDto {
         private UUID conversationId;
         private String message;
         private String title;
-        private String role;
+        private Role role;
         private String userId;
 
         public ChatResponseDtoBuilder conversationId(UUID conversationId) {
@@ -69,7 +71,7 @@ public class ChatResponseDto {
             this.title = title;
             return this;
         }
-        public ChatResponseDtoBuilder role(String role) {
+        public ChatResponseDtoBuilder role(Role role) {
             this.role = role;
             return this;
         }

@@ -10,5 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ChatRepository extends JpaRepository<ChatMessage, Long> {
 
-    List<ChatMessage> findAllByConversationIdAndUserIdOrderByTimestampAsc(UUID conversationId, String userId);
+    List<ChatMessage> findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(UUID conversationId, String userId);
+
+
 }

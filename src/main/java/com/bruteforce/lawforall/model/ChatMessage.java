@@ -58,7 +58,7 @@ public class ChatMessage {
     /*
     * The message content.
     */
-    @Column(name = "message")
+    @Column(name = "message", nullable = false, columnDefinition = "LONGTEXT")
     private String message;
 
     /**
