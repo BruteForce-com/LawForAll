@@ -14,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,16 +44,14 @@ public class AiService {
 
 
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
-    public ChatResponseDto askAI(ChatRequestDto requestDto) throws Exception{
+    public ChatResponseDto askAI(ChatRequestDto requestDto, UUID userId) {
         log.info("Chat request received by user with : {}", requestDto.getUserId());
 
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found or Chat session not belongs to User with id: " + requestDto.getUserId()));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found or Chat session not belongs to User with id: " + requestDto.getUserId()));
 
         log.info("user with id: {} found and allowed to use AIService", requestDto.getUserId());
 
-        // convert UUID to String to userId in ChatMessage model class
-        String userId = user.getUserId().toString();
 
         // Check that Session Already created or not
         List<ChatMessage> chatMessages = chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(requestDto.getConversationId(),userId);
@@ -83,16 +83,24 @@ public class AiService {
         // From this the AI RESPONSE will be generated to answer the User Question
         log.info("Generating LLM Prompt response for user with id: {} and conversation id: {}", requestDto.getUserId(), conversationId);
 
-        PromptTemplate promptTemplate = promptTemplateConfig.aiAssistPromptTemplate();
-
         Map<String, Object> variables = new HashMap<>();
+        String overAllPrompt = "";
+        try {
+            PromptTemplate promptTemplate = promptTemplateConfig.aiAssistPromptTemplate();
+            variables.put("fullname", user.getFullName());
+            variables.put("conversationId", conversationId);
+            variables.put("role", user.getRole());
+            variables.put("message", requestDto.getMessage());
+            overAllPrompt = promptTemplate.create(variables).getContents();
+            log.info("Prompt sent to llm with user query: {}", overAllPrompt);
+        } catch (IOException e) {
+            log.error("Error reading prompt template file: {}", e.getMessage());
+            throw new RuntimeException("Error reading prompt template file", e);
+        }
 
-        variables.put("fullname", user.getFullName());
-        variables.put("conversationId", conversationId);
-        variables.put("role", user.getRole());
-        variables.put("message", requestDto.getMessage());
-        String overAllPrompt = promptTemplate.create(variables).getContents();
-        log.info("Prompt sent to llm with user query: {}", overAllPrompt);
+
+
+
 
         // Generate the llm response for the requestDto.getMessage()
         String llmResponse = chatClient.prompt(overAllPrompt)
@@ -114,7 +122,7 @@ public class AiService {
 
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<ChatResponseDto> getAllChatsOfSession(UUID conversationId, UUID userId) {
-        List<ChatMessage> chatMessages =  chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(conversationId, userId.toString());
+        List<ChatMessage> chatMessages =  chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(conversationId, userId);
         return chatMessages.stream().map(DtoConverter::convertChatMessageToChatResponseDto).toList();
     }
 

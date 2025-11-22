@@ -30,7 +30,6 @@ public final class DtoConverter {
                 .message(savedChat.getMessage())
                 .title(savedChat.getTitle())
                 .role(savedChat.getRole())
-                .userId(savedChat.getUserId())
                 .build();
     }
 }

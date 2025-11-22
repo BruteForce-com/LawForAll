@@ -10,16 +10,14 @@ public class ChatResponseDto {
     private String message;
     private String title;
     private Role role;
-    private String userId;
 
     public ChatResponseDto() {
     }
-    public ChatResponseDto(UUID conversationId, String message, String title, Role role, String userId) {
+    public ChatResponseDto(UUID conversationId, String message, String title, Role role) {
         this.conversationId = conversationId;
         this.message = message;
         this.title = title;
         this.role = role;
-        this.userId = userId;
     }
     public UUID getConversationId() {
         return conversationId;
@@ -45,19 +43,12 @@ public class ChatResponseDto {
     public void setRole(Role role) {
         this.role = role;
     }
-    public String getUserId() {
-        return userId;
-    }
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public static class ChatResponseDtoBuilder {
         private UUID conversationId;
         private String message;
         private String title;
         private Role role;
-        private String userId;
 
         public ChatResponseDtoBuilder conversationId(UUID conversationId) {
             this.conversationId = conversationId;
@@ -75,12 +66,8 @@ public class ChatResponseDto {
             this.role = role;
             return this;
         }
-        public ChatResponseDtoBuilder userId(String userId) {
-            this.userId = userId;
-            return this;
-        }
         public ChatResponseDto build() {
-            return new ChatResponseDto(conversationId, message, title, role, userId);
+            return new ChatResponseDto(conversationId, message, title, role);
         }
     }
 }

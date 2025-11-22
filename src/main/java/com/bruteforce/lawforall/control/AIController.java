@@ -34,17 +34,12 @@ public class AIController {
 
         logger.info("{} asked AI: {}", user.getUsername(), requestDto.getMessage());
 
-        try{
-            requestDto.setUserId(user.getId());
-            return ResponseEntity.ok(aiService.askAI(requestDto));
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+        UUID userID = user.getId();
+        return ResponseEntity.ok(aiService.askAI(requestDto,userID));
     }
 
     @GetMapping("/chats/{conversationId}")
-    public ResponseEntity<?> getAllChatsOfSession(@AuthenticationPrincipal UserPriciple user, @PathVariable UUID conversationId) {
+    public ResponseEntity<?> getAllChatsOfSession(@AuthenticationPrincipal UserPriciple user, @Valid @PathVariable UUID conversationId) {
         try{
             List<ChatResponseDto> response = aiService.getAllChatsOfSession(conversationId, user.getId());
             if(response.isEmpty()) {

@@ -21,7 +21,7 @@ public class PromptTemplateConfig {
     private Resource promptTemplate;
 
     @Bean
-    public PromptTemplate aiAssistPromptTemplate() throws IOException {
+    public PromptTemplate aiAssistPromptTemplate() throws IOException{
 
         String templateContent = StreamUtils.copyToString(promptTemplate.getInputStream(), StandardCharsets.UTF_8);
         log.info("Loaded AI Assistant prompt template with size: {} characters", templateContent.length());

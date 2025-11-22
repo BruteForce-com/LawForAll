@@ -3,12 +3,14 @@ package com.bruteforce.lawforall.service;
 import com.bruteforce.lawforall.Utils.DtoConverter;
 import com.bruteforce.lawforall.dto.SignInRequestDto;
 import com.bruteforce.lawforall.dto.SignUpRequestDto;
+import com.bruteforce.lawforall.exception.InvalidPassword;
 import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
 import com.bruteforce.lawforall.repo.UserRepository;
 import com.bruteforce.lawforall.security.JwtService;
 import com.bruteforce.lawforall.security.UserPriciple;
 import jakarta.validation.Valid;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,21 +65,20 @@ public class AuthService {
         // check the user exists or not
         if(requestDto.getUsernameOrEmail().contains("@")) {
             User user = userRepository.findByEmail(requestDto.getUsernameOrEmail());
-            System.out.println(user);
             if(user == null) {
-                throw new IllegalArgumentException("User not found");
+                throw new UsernameNotFoundException("User not found");
             }
             if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-                throw new IllegalArgumentException("Invalid password");
+                throw new InvalidPassword("Invalid password");
             }
             return jwtService.generateToken(user.getEmail());
         } else {
             User user = userRepository.findByUsername(requestDto.getUsernameOrEmail());
             if(user == null) {
-                throw new IllegalArgumentException("User not found");
+                throw new UsernameNotFoundException("User not found");
             }
             if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-                throw new IllegalArgumentException("Invalid password");
+                throw new InvalidPassword("Invalid password");
             }
             return jwtService.generateToken(user.getUsername());
         }

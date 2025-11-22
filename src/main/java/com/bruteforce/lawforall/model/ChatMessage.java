@@ -47,7 +47,7 @@ public class ChatMessage {
      * The unique identifier for the user that sent this message.
      */
     @Column(name = "user_id", nullable = false, length = 255)
-    private String userId;
+    private UUID userId;
 
     /**
      * The title of the conversation.
@@ -84,7 +84,7 @@ public class ChatMessage {
     public ChatMessage() {
     }
 
-    public ChatMessage(UUID conversationId, String userId, String message, String title,
+    public ChatMessage(UUID conversationId, UUID userId, String message, String title,
                               Instant createdAt, Instant updatedAt, Role role) {
         this.conversationId = conversationId;
         this.userId = userId;
@@ -129,11 +129,11 @@ public class ChatMessage {
         this.conversationId = conversationId;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -185,7 +185,7 @@ public class ChatMessage {
 
     public static class ChatMessageEntityBuilder {
         private UUID conversationId;
-        private String userId;
+        private UUID userId;
         private String title;
         private String message;
         private Instant createdAt;
@@ -200,7 +200,7 @@ public class ChatMessage {
             return this;
         }
 
-        public ChatMessageEntityBuilder userId(String userId) {
+        public ChatMessageEntityBuilder userId(UUID userId) {
             this.userId = userId;
             return this;
         }
