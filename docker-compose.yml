@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Backend Spring Boot API
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+       # GEMINI API Key
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SPRING_APPLICATION_NAME=LawForAll-Backend
+      # Database - using service name for connection
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/LawForAllDB
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      # JPA Configuration
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET:-A+qQG74MbotrXCt/jj6P6D2qNDiuVZk3uv05ai5jG4k=}
+      - JWT_EXPIRATION_MS=86400000
+      # Logging Configuration
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=DEBUG
+      - LOGGING_LEVEL_ORG_AI_TUTOR_SECURITY=DEBUG
+    depends_on:
+      - postgres
+    networks:
+      - lawforall-network
+
+  # PostgreSQL Database with pgvector extension
+  postgres:
+    image: ankane/pgvector:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=LawForAllDB
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - lawforall-network
+
+networks:
+  lawforall-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
