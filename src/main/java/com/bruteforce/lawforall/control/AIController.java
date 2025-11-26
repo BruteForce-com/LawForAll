@@ -50,4 +50,13 @@ public class AIController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/chats/{conversationId}")
+    public ResponseEntity<?> deleteChatSession(@AuthenticationPrincipal UserPriciple user, @Valid @PathVariable UUID conversationId) {
+
+        logger.info("Deleting chat session for user: {} and conversation id: {}", user.getUsername(), conversationId);
+        String response =  aiService.deleteChatSession(conversationId, user.getId());
+        logger.info("Deleted chat session for user: {} and conversation id: {}. Response: {}", user.getUsername(), conversationId, response);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

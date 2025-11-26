@@ -4,6 +4,7 @@ import com.bruteforce.lawforall.Utils.DtoConverter;
 import com.bruteforce.lawforall.config.AIConfig.PromptTemplateConfig;
 import com.bruteforce.lawforall.dto.ChatRequestDto;
 import com.bruteforce.lawforall.dto.ChatResponseDto;
+import com.bruteforce.lawforall.exception.NoChatSessionFoundException;
 import com.bruteforce.lawforall.model.ChatMessage;
 import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
@@ -124,6 +125,22 @@ public class AiService {
     public List<ChatResponseDto> getAllChatsOfSession(UUID conversationId, UUID userId) {
         List<ChatMessage> chatMessages =  chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(conversationId, userId);
         return chatMessages.stream().map(DtoConverter::convertChatMessageToChatResponseDto).toList();
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
+    public String deleteChatSession(UUID conversationID,UUID userId){
+
+        log.info("Deleting chat session for conversation ID: {}", conversationID);
+
+        if(chatRepository.deleteAllByConversationIdAndUserId(conversationID, userId) > 0){
+            log.info("Chat session deleted successfully for conversation ID: {}", conversationID);
+            return "Chat session deleted successfully "+ conversationID;
+        }
+
+        log.info("No chat session found for conversation ID: {}", conversationID);
+
+        throw new NoChatSessionFoundException("No chat session found for user" + userId + "with conversationID " + conversationID);
+
     }
 
 }
