@@ -40,7 +40,7 @@ services:
   pgvector:
     image: ankane/pgvector:latest
     ports:
-      - "5433:5432"  # Changed port to 5433 to avoid conflict with application DB
+      - "5433:5433"  # Changed port to 5433 to avoid conflict with application DB
     environment:
       - POSTGRES_USER=pgvector
       - POSTGRES_PASSWORD=vector123

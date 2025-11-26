@@ -12,8 +12,6 @@ public interface ChatRepository extends JpaRepository<ChatMessage, Long> {
 
     List<ChatMessage> findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(UUID conversationId, UUID userId);
 
-//    boolean existsChatMessageBy(UUID conversationId);
-
 
     Long deleteAllByConversationIdAndUserId(UUID conversationID, UUID userId);
 }
