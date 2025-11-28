@@ -50,7 +50,7 @@ public class AiService {
 
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
     public ChatResponseDto askAI(ChatRequestDto requestDto, UUID userId) {
-        log.info("Chat request received by user with : {}", requestDto.getUserId());
+        log.info("Chat request received by user with : {}", userId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found or Chat session not belongs to User with id: " + requestDto.getUserId()));

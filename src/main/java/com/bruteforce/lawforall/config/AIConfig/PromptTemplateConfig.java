@@ -26,8 +26,5 @@ public class PromptTemplateConfig {
         String templateContent = StreamUtils.copyToString(promptTemplate.getInputStream(), StandardCharsets.UTF_8);
         log.info("Loaded AI Assistant prompt template with size: {} characters", templateContent.length());
         return new PromptTemplate(templateContent);
-
-
-
     }
 }
