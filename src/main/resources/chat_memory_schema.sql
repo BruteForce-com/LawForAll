@@ -1,0 +1,7 @@
+-- CREATE TABLE IF NOT EXISTS chat_memory (
+-- 	id SERIAL PRIMARY KEY,
+-- 	user_id VARCHAR(255),
+-- 	message VARCHAR(255),
+-- 	conversation_id VARCHAR(255)
+--     `role` VARCHAR(255)
+-- );

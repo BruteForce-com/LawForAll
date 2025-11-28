@@ -13,6 +13,8 @@ import com.bruteforce.lawforall.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,12 +37,14 @@ public class AiService {
     private final ChatRepository chatRepository;
     private final PromptTemplateConfig promptTemplateConfig;
     private final ChatClient chatClient;
+    private final ChatMemory chatMemory;
     public AiService(UserRepository userRepository, ChatRepository chatRepository,
-                     PromptTemplateConfig promptTemplateConfig, GoogleGenAiChatModel chatModel) {
+                     PromptTemplateConfig promptTemplateConfig, GoogleGenAiChatModel chatModel, ChatMemory chatMemory) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.promptTemplateConfig = promptTemplateConfig;
         this.chatClient = ChatClient.create(chatModel);
+        this.chatMemory = chatMemory;
     }
 
 
@@ -100,11 +104,9 @@ public class AiService {
         }
 
 
-
-
-
         // Generate the llm response for the requestDto.getMessage()
         String llmResponse = chatClient.prompt(overAllPrompt)
+                .advisors(PromptChatMemoryAdvisor.builder(chatMemory).build())
                 .call().content();
 
         // Create and save the new chat message in the database
