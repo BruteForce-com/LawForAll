@@ -1,7 +1,6 @@
 package com.bruteforce.lawforall.service;
 
 import com.bruteforce.lawforall.Utils.DtoConverter;
-import com.bruteforce.lawforall.config.AIConfig.PromptTemplateConfig;
 import com.bruteforce.lawforall.dto.ChatRequestDto;
 import com.bruteforce.lawforall.dto.ChatResponseDto;
 import com.bruteforce.lawforall.exception.NoChatSessionFoundException;
@@ -21,8 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
