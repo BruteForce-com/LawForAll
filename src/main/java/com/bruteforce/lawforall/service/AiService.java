@@ -4,6 +4,7 @@ import com.bruteforce.lawforall.Utils.DtoConverter;
 import com.bruteforce.lawforall.config.AIConfig.PromptTemplateConfig;
 import com.bruteforce.lawforall.dto.ChatRequestDto;
 import com.bruteforce.lawforall.dto.ChatResponseDto;
+import com.bruteforce.lawforall.exception.NoChatSessionFoundException;
 import com.bruteforce.lawforall.model.ChatMessage;
 import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
@@ -12,6 +13,8 @@ import com.bruteforce.lawforall.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,33 +35,35 @@ public class AiService {
 
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
-    private final PromptTemplateConfig promptTemplateConfig;
+    private final PromptTemplate promptTemplateConfig;
     private final ChatClient chatClient;
+    private final ChatMemory chatMemory;
     public AiService(UserRepository userRepository, ChatRepository chatRepository,
-                     PromptTemplateConfig promptTemplateConfig, GoogleGenAiChatModel chatModel) {
+                     PromptTemplate promptTemplateConfig, GoogleGenAiChatModel chatModel, ChatMemory chatMemory) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.promptTemplateConfig = promptTemplateConfig;
         this.chatClient = ChatClient.create(chatModel);
+        this.chatMemory = chatMemory;
     }
 
 
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
     public ChatResponseDto askAI(ChatRequestDto requestDto, UUID userId) {
-        log.info("Chat request received by user with : {}", requestDto.getUserId());
+        log.info("Chat request received by user with : {}", userId);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found or Chat session not belongs to User with id: " + requestDto.getUserId()));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found or Chat session not belongs to User with id: " + userId));
 
-        log.info("user with id: {} found and allowed to use AIService", requestDto.getUserId());
+        log.info("user with id: {} found and allowed to use AIService", userId);
 
 
         // Check that Session Already created or not
-        List<ChatMessage> chatMessages = chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(requestDto.getConversationId(),userId);
+       Boolean isChatMessagesExists = chatRepository.existsByConversationIdAndUserId(requestDto.getConversationId(),userId);
 
         // conversationId for creating a new session if not exist. Otherwise, use existing conversationId
         UUID conversationId;
-        if(chatMessages == null || chatMessages.isEmpty()) {
+        if(!isChatMessagesExists) {
             log.info("Chat session not found for user with id: {} and conversation id: {}", requestDto.getUserId(), requestDto.getConversationId());
             log.info("Creating new Chat session for user with id: {} and conversation id: {}", requestDto.getUserId(), requestDto.getConversationId());
             conversationId = UUID.randomUUID();
@@ -84,26 +89,17 @@ public class AiService {
         log.info("Generating LLM Prompt response for user with id: {} and conversation id: {}", requestDto.getUserId(), conversationId);
 
         Map<String, Object> variables = new HashMap<>();
-        String overAllPrompt = "";
-        try {
-            PromptTemplate promptTemplate = promptTemplateConfig.aiAssistPromptTemplate();
-            variables.put("fullname", user.getFullName());
-            variables.put("conversationId", conversationId);
-            variables.put("role", user.getRole());
-            variables.put("message", requestDto.getMessage());
-            overAllPrompt = promptTemplate.create(variables).getContents();
-            log.info("Prompt sent to llm with user query: {}", overAllPrompt);
-        } catch (IOException e) {
-            log.error("Error reading prompt template file: {}", e.getMessage());
-            throw new RuntimeException("Error reading prompt template file", e);
-        }
 
-
-
-
+        variables.put("fullname", user.getFullName());
+        variables.put("conversationId", conversationId);
+        variables.put("role", user.getRole());
+        variables.put("message", requestDto.getMessage());
+        String overAllPrompt = promptTemplateConfig.create(variables).getContents();
+        log.info("Prompt sent to llm with user query: {}", overAllPrompt);
 
         // Generate the llm response for the requestDto.getMessage()
         String llmResponse = chatClient.prompt(overAllPrompt)
+                .advisors(PromptChatMemoryAdvisor.builder(chatMemory).conversationId(conversationId.toString() + userId).build())
                 .call().content();
 
         // Create and save the new chat message in the database
@@ -114,7 +110,7 @@ public class AiService {
                 .message(llmResponse)
                 .build();
         ChatMessage savedChat = chatRepository.save(chat);
-
+        log.info("Saved LLM response in database for user with id: {} and conversation id: {} requested for query: {} ", userId, conversationId, savedChat.getMessage());
         // Return the response by converting ChatMessage to ChatResponseDto
         return DtoConverter.convertChatMessageToChatResponseDto(savedChat);
 
@@ -124,6 +120,22 @@ public class AiService {
     public List<ChatResponseDto> getAllChatsOfSession(UUID conversationId, UUID userId) {
         List<ChatMessage> chatMessages =  chatRepository.findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(conversationId, userId);
         return chatMessages.stream().map(DtoConverter::convertChatMessageToChatResponseDto).toList();
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = false)
+    public String deleteChatSession(UUID conversationID,UUID userId){
+
+        log.info("Deleting chat session for conversation ID: {}", conversationID);
+
+        if(chatRepository.deleteAllByConversationIdAndUserId(conversationID, userId) > 0){
+            log.info("Chat session deleted successfully for conversation ID: {}", conversationID);
+            return "Chat session deleted successfully "+ conversationID;
+        }
+
+        log.info("No chat session found for conversation ID: {}", conversationID);
+
+        throw new NoChatSessionFoundException("No chat session found for user" + userId + "with conversationID " + conversationID);
+
     }
 
 }
