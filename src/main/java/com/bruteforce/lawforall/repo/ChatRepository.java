@@ -12,6 +12,7 @@ public interface ChatRepository extends JpaRepository<ChatMessage, Long> {
 
     List<ChatMessage> findAllByConversationIdAndUserIdOrderByUpdatedAtAsc(UUID conversationId, UUID userId);
 
+    Boolean existsByConversationIdAndUserId(UUID conversationId, UUID userId);
 
     Long deleteAllByConversationIdAndUserId(UUID conversationID, UUID userId);
 }
