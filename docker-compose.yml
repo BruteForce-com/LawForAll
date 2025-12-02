@@ -6,6 +6,9 @@ services:
     build: .
     ports:
       - "8080:8080"
+    volumes:
+      - ./src:/app/src
+      - ./target:/app/target
     environment:
        # GEMINI API Key
       - GEMINI_API_KEY=${GEMINI_API_KEY}
@@ -15,11 +18,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=12345
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
-      
-      # Vector Database Configuration
-      - VECTOR_DB_URL=jdbc:postgresql://pgvector:5432/lawforall_vector_db
-      - VECTOR_DB_USERNAME=pgvector
-      - VECTOR_DB_PASSWORD=vector123
+
       # JPA Configuration
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_SHOW_SQL=true
@@ -28,6 +27,11 @@ services:
       # JWT Configuration
       - JWT_SECRET=${JWT_SECRET:-A+qQG74MbotrXCt/jj6P6D2qNDiuVZk3uv05ai5jG4k=}
       - JWT_EXPIRATION_MS=86400000
+      # Embedding Configuration with pgvector
+      - SPRING_AI_GOOGLE_GENAI_EMBEDDING_API_KEY=${GEMINI_API_KEY}
+      - SPRING_AI_GOOGLE_GENAI_EMBEDDING_TEXT_OPTIONS_MODEL=text-embedding-001
+      - SPRING_AI_VECTORSTORE_PGVECTOR_DIMENSIONS=1536
+      - SPRING_AI_VECTORSTORE_PGVECTOR_INITIALIZE_SCHEMA=true
       # Logging Configuration
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=DEBUG
       - LOGGING_LEVEL_ORG_AI_TUTOR_SECURITY=DEBUG
@@ -36,24 +40,10 @@ services:
     networks:
       - lawforall-network
 
-  # PostgreSQL Database with pgvector extension (for vector operations)
-  pgvector:
-    image: ankane/pgvector:latest
-    ports:
-      - "5433:5433"  # Changed port to 5433 to avoid conflict with application DB
-    environment:
-      - POSTGRES_USER=pgvector
-      - POSTGRES_PASSWORD=vector123
-      - POSTGRES_DB=lawforall_vector_db
-    volumes:
-      - pgvector-data:/var/lib/postgresql/data
-      - ./init-vector-db.sql:/docker-entrypoint-initdb.d/init-vector-db.sql
-    networks:
-      - lawforall-network
 
-  # Regular PostgreSQL Database (for normal operations)
+  # Regular PostgreSQL along with vector extension Database
   postgres:
-    image: postgres:15-alpine
+    image: pgvector/pgvector:pg16  # Used pgvector-enabled image for both PostgreSQL and vector extension
     ports:
       - "5432:5432"
     environment:
@@ -72,5 +62,4 @@ networks:
 
 volumes:
   postgres-data:
-  pgvector-data:
 
