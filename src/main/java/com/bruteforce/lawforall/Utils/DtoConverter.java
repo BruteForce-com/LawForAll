@@ -2,8 +2,10 @@ package com.bruteforce.lawforall.Utils;
 
 
 import com.bruteforce.lawforall.dto.ChatResponseDto;
+import com.bruteforce.lawforall.dto.RagMetaDataInfo;
 import com.bruteforce.lawforall.dto.SignUpRequestDto;
 import com.bruteforce.lawforall.model.ChatMessage;
+import com.bruteforce.lawforall.model.RagMetaData;
 import com.bruteforce.lawforall.model.Role;
 import com.bruteforce.lawforall.model.User;
 
@@ -30,6 +32,14 @@ public final class DtoConverter {
                 .message(savedChat.getMessage())
                 .title(savedChat.getTitle())
                 .role(savedChat.getRole())
+                .build();
+    }
+
+    // convert rag meta data to rag meta data info
+    public static RagMetaDataInfo convertRagMetaDataToRagMetaDataInfo(RagMetaData ragMetaData) {
+        return new RagMetaDataInfo.RagMetaDataInfoBuilder()
+                .fileName(ragMetaData.getFileName())
+                .dateOfUpload(ragMetaData.getDateOfUpload())
                 .build();
     }
 }
