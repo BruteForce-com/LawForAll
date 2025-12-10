@@ -35,13 +35,16 @@ public class AiService {
     private final PromptTemplate promptTemplateConfig;
     private final ChatClient chatClient;
     private final ChatMemory chatMemory;
+    private final DocumentRetrievalService documentRetrievalService;
     public AiService(UserRepository userRepository, ChatRepository chatRepository,
-                     PromptTemplate promptTemplateConfig, GoogleGenAiChatModel chatModel, ChatMemory chatMemory) {
+                     PromptTemplate promptTemplateConfig, GoogleGenAiChatModel chatModel, ChatMemory chatMemory
+                    , DocumentRetrievalService documentRetrievalService) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.promptTemplateConfig = promptTemplateConfig;
         this.chatClient = ChatClient.create(chatModel);
         this.chatMemory = chatMemory;
+        this.documentRetrievalService = documentRetrievalService;
     }
 
 
@@ -92,6 +95,12 @@ public class AiService {
         variables.put("role", user.getRole());
         variables.put("message", requestDto.getMessage());
         String overAllPrompt = promptTemplateConfig.create(variables).getContents();
+        log.info("Prompt sent to llm with user query: {}", overAllPrompt);
+
+        // GET RELEVANT CONTEXT FROM RAG
+        String relevantContext = documentRetrievalService.getContext(requestDto.getMessage());
+        log.info("Relevant context fetched from RAG: {}", relevantContext);
+        overAllPrompt = relevantContext + overAllPrompt;
         log.info("Prompt sent to llm with user query: {}", overAllPrompt);
 
         // Generate the llm response for the requestDto.getMessage()
